@@ -1,0 +1,32 @@
+avg of order value = AVERAGE(Orders[Units Sold])
+
+COUNT OF ORDERS = COUNTROWS(Orders)
+
+DAY OF WEEK = WEEKDAY(Orders[Date],1)
+
+DISTINCT CUSTOMERS = DISTINCTCOUNT(Orders[Customer ID]) 
+// THIS TELLS US HOW MANY DISTINCT CUSTOMERS WE HAVE 
+
+grouping_of_products = SWITCH(
+                            TRUE(),
+                            Orders[Units Sold] <= 100 , "small_quantity" ,
+                            Orders[Units Sold] <= 500 , "medium_quantity",
+                            Orders[Units Sold] <= 1000 , "large_quantity",
+                            "extra large quantity sold"
+                        )
+
+HAS CHOCOLATE = IF(FIND("Chocolate",Orders[Product],1,0) = 1 ,"Has Chocolate","No Chocolate")
+
+Profit = Orders[Revenue] - Orders[Cost]
+
+Profit Margin % = [Total Profit]/ SUM(Orders[Revenue])
+
+Total Profit = SUM(Orders[Revenue]) - SUM(Orders[Cost])
+
+Total unit sold = COUNT(Orders[Units Sold])
+
+Total_profit_for_6th_week_fortune_cookie = CALCULATE(sum(Orders[Profit]), Orders[DAY OF WEEK] == 6 , Orders[Product] == "Fortune Cookie" )
+Total_profit_for_Cc_&_FC = CALCULATE(SUM(Orders[Profit]), (Orders[Product] in {"Chocolate Chip" , "Fortune Cookie"}))
+
+Total_Profit_sumx = SUMX('Cookie Types',  'Cookie Types'[Units Sold] * ('Cookie Types'[Revenue Per Cookie] - 'Cookie Types'[Cost Per Cookie]))
+
